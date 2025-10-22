@@ -14,7 +14,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-@CrossOrigin(origins = "https://boxscores-frontend.vercel.app/")
+@CrossOrigin(origins = "*")
 @RestController
 public class BoxScoresController {
 
