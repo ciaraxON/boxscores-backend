@@ -1,25 +1,27 @@
-# Use an official OpenJDK image
+# Use an official lightweight Java image
 FROM eclipse-temurin:17-jdk-alpine AS build
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the Maven wrapper and project files
+# Copy Maven wrapper and project files
 COPY . .
 
-# Build the project (skip tests to speed it up)
+# Give execute permission to mvnw
+RUN chmod +x ./mvnw
+
+# Build the project (skip tests to speed up)
 RUN ./mvnw clean package -DskipTests
 
-# Run the built JAR in a lightweight runtime container
+# Second stage - run the app
 FROM eclipse-temurin:17-jdk-alpine
 
 WORKDIR /app
 
-# Copy the compiled JAR from the build stage
+# Copy compiled jar from the build stage
 COPY --from=build /app/target/*.jar app.jar
 
-# Expose the application port
+# Expose the port your app runs on
 EXPOSE 8080
 
-# Start the app
+# Run the app
 ENTRYPOINT ["java","-jar","app.jar"]
